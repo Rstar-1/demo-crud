@@ -524,18 +524,37 @@ tr:nth-child(even):hover {
 }
 .h-input {
   height: 35px !important;
-  border: 1px solid #ececec !important;
-  padding-left: 12px !important;
 }
-.w-input {
-  width: 97% !important;
+.cust-scroll {
+  height: 80vh !important;
+  overflow-y: auto !important;
 }
-.pop-input {
-  width: 96% !important;
+.side-scroll {
+  height: 90vh !important;
+  overflow-y: auto !important;
 }
-.text-input {
-  width: 99% !important;
-  border: 1px solid #ececec !important;
+.sidebar-w {
+  width: 25% !important;
+}
+.side-input {
+  width: 95% !important;
+}
+.border-images {
+  border: 1px dashed #3d3c3c !important;
+  height: 190px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  border-radius: 10px !important;
+}
+.img-input {
+  width: 93.5% !important;
+  height: 190px !important;
+  opacity: 0 !important;
+}
+.side-img {
+  width: 350px !important;
+  height: 350px !important;
 }
 /* ======================= End-Table ======================= */
 
