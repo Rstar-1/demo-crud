@@ -4,7 +4,7 @@ const HeroSection = () => {
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
       <div className="container mx-auto">
-        <div className="mx-auto bshadow w-50 bgwhite p20">
+        <div className="mx-auto bshadow w-40 bgwhite p20">
           <h4 className="mtpx1 mbpx1 text-center fsize25 font-600">Add user</h4>
           <div className="grid-cols-2 gap-12 mtpx20">
             <div className="plpx12 prpx12">
