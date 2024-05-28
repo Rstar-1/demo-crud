@@ -1,4 +1,4 @@
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Error from "./website/error/Error";
 import ScrollToTop from "./website/scrolltotop/ScrollToTop";
 import Navbar from "./website/navbar/Navbar";
@@ -10,7 +10,7 @@ import Blog from "./website/pages/blog/Blog";
 const App = () => {
   return (
     <div className="App">
-      <Router>
+     
         <ScrollToTop />
         <Navbar />
         <Routes>
@@ -26,7 +26,6 @@ const App = () => {
           {/* ======================= End-Error ======================= */}
         </Routes>
         <Footer />
-      </Router>
     </div>
   );
 };
