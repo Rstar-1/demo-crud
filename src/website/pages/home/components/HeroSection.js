@@ -1,6 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
+import { addUser } from "../../../../redux/seo/seoSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const HeroSection = () => {
+  const dispatch = useDispatch();
+
+  const { isSuccess } = useSelector((state) => state.user);
+  const [inputValue, setInputValue] = useState({
+    title: "",
+    author: "",
+    keyword: "",
+    description: "",
+  });
+
+  const handleInput = (e) => {
+    setInputValue({ ...inputValue, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addUser(inputValue));
+    console.log(inputValue);
+
+    setTimeout(() => {
+      alert("rr");
+    }, 2000);
+  };
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
       <div className="container mx-auto">
@@ -12,6 +36,8 @@ const HeroSection = () => {
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                 placeholder="Enter"
+                value={inputValue.title}
+                onChange={handleInput}
               />
             </div>
             <div className="plpx12 prpx12">
@@ -19,6 +45,8 @@ const HeroSection = () => {
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                 placeholder="Enter"
+                value={inputValue.author}
+                onChange={handleInput}
               />
             </div>
             <div className="plpx12 prpx12">
@@ -26,6 +54,8 @@ const HeroSection = () => {
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                 placeholder="Enter"
+                value={inputValue.keyword}
+                onChange={handleInput}
               />
             </div>
             <div className="plpx12 prpx12">
@@ -33,11 +63,16 @@ const HeroSection = () => {
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                 placeholder="Enter"
+                value={inputValue.description}
+                onChange={handleInput}
               />
             </div>
           </div>
           <div className="flex justify-center mtpx20">
-            <button className="border-0 cursor-pointer font-500 textwhite rounded-5 ptpx6 pbpx6 plpx25 prpx25 fsize13 bgprimary">
+            <button
+              className="border-0 cursor-pointer font-500 textwhite rounded-5 ptpx6 pbpx6 plpx25 prpx25 fsize13 bgprimary"
+              onClick={handleSubmit}
+            >
               Submit
             </button>
           </div>
