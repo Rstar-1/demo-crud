@@ -7,17 +7,10 @@ export const fetchUsers = createAsyncThunk("seo/getdata", async () => {
     .then((res) => res.data);
 });
 
-export const addUser = createAsyncThunk("seo/seoregister", async (values) => {
-  return fetch("http://localhost:8000/api/seoregister", {
-    method: "POST",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify({
-      title: values.title,
-      author: values.author,
-      keyword: values.keyword,
-      description: values.description,
-    }),
-  }).then((res) => res.json());
+export const addUser = createAsyncThunk("seo/seoregister", async (payload) => {
+  return axios
+    .post(`http://localhost:8000/api/seoregister`, payload)
+    .then((res) => res.data);
 });
 
 const seoSlice = createSlice({
@@ -46,21 +39,21 @@ const seoSlice = createSlice({
       state.error = action.error.message;
     });
 
-     builder.addCase(addUser.pending, (state) => {
-       state.loading = true;
-       state.error = "";
-     });
-     builder.addCase(addUser.fulfilled, (state, action) => {
-       state.loading = false;
-       state.user = [];
-       state.isSuccess = action.payload;
-     });
+    builder.addCase(addUser.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(addUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = [];
+      state.isSuccess = action.payload;
+    });
 
-     builder.addCase(addUser.rejected, (state, action) => {
-       state.loading = false;
-       state.user = [];
-       state.error = action.error.message;
-     });
+    builder.addCase(addUser.rejected, (state, action) => {
+      state.loading = false;
+      state.user = [];
+      state.error = action.error.message;
+    });
   },
 });
 

@@ -26,8 +26,11 @@ const LeftImageSection1 = () => {
               <th className="fsize13 textwhite w-10 font-300">
                 <p>Meta Author</p>
               </th>
-              <th className="fsize13 textwhite w-20 font-300">
+              <th className="fsize13 textwhite w-10 font-300">
                 <p>Meta Keyword</p>
+              </th>
+              <th className="fsize13 textwhite w-10 font-300">
+                <p>Meta Conacial</p>
               </th>
               <th className="fsize13 textwhite w-30 font-300">
                 <p>Meta Description</p>
@@ -49,8 +52,11 @@ const LeftImageSection1 = () => {
                 <td className="fsize13 textforth w-10 font-300">
                   <p>{e.metaauthor}</p>
                 </td>
-                <td className="fsize13 textforth w-20 font-300">
+                <td className="fsize13 textforth w-10 font-300">
                   <p>{e.metakeyword}</p>
+                </td>
+                <td className="fsize13 textforth w-10 font-300">
+                  <p>{e.metaconcial}</p>
                 </td>
                 <td className="fsize13 textforth w-30 font-300">
                   <p>{e.metadescription}</p>
