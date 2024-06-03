@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Error from "./website/error/Error";
 import ScrollToTop from "./website/scrolltotop/ScrollToTop";
 import Navbar from "./website/navbar/Navbar";
-import Footer from "./website/footer/Footer";
+// import Footer from "./website/footer/Footer";
 import Home from "./website/pages/home/Home";
 import About from "./website/pages/about/About";
 import Blog from "./website/pages/blog/Blog";
@@ -25,7 +25,7 @@ const App = () => {
           <Route path="*" element={<Error />} />
           {/* ======================= End-Error ======================= */}
         </Routes>
-        <Footer />
+        {/* <Footer /> */}
     </div>
   );
 };
