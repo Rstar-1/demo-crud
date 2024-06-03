@@ -6,6 +6,7 @@ import Navbar from "./website/navbar/Navbar";
 import Home from "./website/pages/home/Home";
 import About from "./website/pages/about/About";
 import Blog from "./website/pages/blog/Blog";
+import EditCard from "./website/pages/about/components/EditCard";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/edit/:id" element={<EditCard />} />
           <Route path="/blogs" element={<Blog />} />
           {/* ======================= End-pages ======================= */}
 
