@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { updateUser } from "../../../../redux/seo/seoSlice";
+import { updateUser,SingleUser } from "../../../../redux/seo/seoSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const EditCard = () => {
@@ -14,13 +14,16 @@ const EditCard = () => {
     metadescription: "",
   });
 
+  const singleseodata = async () => {
+    dispatch(SingleUser(inputValue));
+  };
+
   const handleInput = (e) => {
     setInputValue({ ...inputValue, [e.target.name]: e.target.value });
     console.log(e.target.name, "ds");
     // console.log(e.target.value, "dss");
   };
   const handleSubmit = (e) => {
-    console.log(inputValue,'555');
     e.preventDefault();
     dispatch(updateUser(inputValue));
     console.log(inputValue);

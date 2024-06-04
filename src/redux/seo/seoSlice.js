@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useParams } from "react-router-dom"
+
 
 export const fetchUsers = createAsyncThunk("seo/getdata", async () => {
   return axios
@@ -10,6 +12,13 @@ export const fetchUsers = createAsyncThunk("seo/getdata", async () => {
 export const addUser = createAsyncThunk("seo/seoregister", async (payload) => {
   return axios
     .post(`http://localhost:8000/api/seoregister`, payload)
+    .then((res) => res.data);
+});
+export const SingleUser = createAsyncThunk("seo/getseosingledata", async (payload) => {
+  const { id } = useParams("");
+  console.log(id);
+  return axios
+    .get(`http://localhost:8000/api/getseosingledata/${id}`, payload)
     .then((res) => res.data);
 });
 export const updateUser = createAsyncThunk("seo/updateseodata", async (payload) => {
@@ -25,7 +34,6 @@ const seoSlice = createSlice({
     user: [],
     error: "",
     isSuccess: "",
-    editDetails:[]
   },
 
   // reducer call
@@ -70,18 +78,26 @@ const seoSlice = createSlice({
       state.user = [];
       state.isSuccess = action.payload;
     });
-
     builder.addCase(updateUser.rejected, (state, action) => {
       state.loading = false;
       state.user = [];
       state.error = action.error.message;
     });
 
-    // builder.addCase(updateUser.fulfilled,(state, action) => {
-    //   state.loading = false;
-    //   state.editDetails = action.payload;
-    //   state.error = "";
-    // });
+    builder.addCase(SingleUser.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(SingleUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = [];
+      state.isSuccess = action.payload;
+    });
+    builder.addCase(SingleUser.rejected, (state, action) => {
+      state.loading = false;
+      state.user = [];
+      state.error = action.error.message;
+    });
   },
 });
 
