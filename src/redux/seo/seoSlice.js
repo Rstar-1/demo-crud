@@ -12,6 +12,11 @@ export const addUser = createAsyncThunk("seo/seoregister", async (payload) => {
     .post(`http://localhost:8000/api/seoregister`, payload)
     .then((res) => res.data);
 });
+export const updateUser = createAsyncThunk("seo/updateseodata", async (payload) => {
+  return axios
+    .patch(`http://localhost:8000/api/updateseodata`, payload)
+    .then((res) => res.data);
+});
 
 const seoSlice = createSlice({
   name: "user",
@@ -20,6 +25,7 @@ const seoSlice = createSlice({
     user: [],
     error: "",
     isSuccess: "",
+    editDetails:[]
   },
 
   // reducer call
@@ -54,6 +60,28 @@ const seoSlice = createSlice({
       state.user = [];
       state.error = action.error.message;
     });
+
+    builder.addCase(updateUser.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = [];
+      state.isSuccess = action.payload;
+    });
+
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.loading = false;
+      state.user = [];
+      state.error = action.error.message;
+    });
+
+    // builder.addCase(updateUser.fulfilled,(state, action) => {
+    //   state.loading = false;
+    //   state.editDetails = action.payload;
+    //   state.error = "";
+    // });
   },
 });
 

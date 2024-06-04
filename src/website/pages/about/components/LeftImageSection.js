@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import FeatherIcon from "feather-icons-react";
 import { fetchUsers } from "../../../../redux/seo/seoSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 const LeftImageSection1 = () => {
   const dispatch = useDispatch();
@@ -62,11 +63,13 @@ const LeftImageSection1 = () => {
                   <p>{e.metadescription}</p>
                 </td>
                 <td className="fsize13 textforth">
-                  <FeatherIcon
-                    icon="edit"
-                    className="textgray cursor-pointer"
-                    size={15}
-                  />
+                  <NavLink to={`/edit/${e._id}`}>
+                    <FeatherIcon
+                      icon="edit"
+                      className="textgray cursor-pointer"
+                      size={15}
+                    />
+                  </NavLink>
 
                   <FeatherIcon
                     icon="trash"

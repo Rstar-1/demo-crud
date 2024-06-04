@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addUser } from "../../../../redux/seo/seoSlice";
+import { updateUser } from "../../../../redux/seo/seoSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const EditCard = () => {
@@ -22,7 +22,7 @@ const EditCard = () => {
   const handleSubmit = (e) => {
     console.log(inputValue,'555');
     e.preventDefault();
-    dispatch(addUser(inputValue));
+    dispatch(updateUser(inputValue));
     console.log(inputValue);
 
     setTimeout(() => {
