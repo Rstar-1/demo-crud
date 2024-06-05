@@ -14,18 +14,32 @@ export const addUser = createAsyncThunk("seo/seoregister", async (payload) => {
     .post(`http://localhost:8000/api/seoregister`, payload)
     .then((res) => res.data);
 });
+
 export const SingleUser = createAsyncThunk("seo/getseosingledata", async (payload) => {
-  const { id } = useParams("");
-  console.log(id);
+  try {
+    console.log(payload,"[p");
+  // const { id } = useParams("");
+  // console.log(id);
   return axios
-    .get(`http://localhost:8000/api/getseosingledata/${id}`, payload)
+    .get(`http://localhost:8000/api/getseosingledata/${payload}`, payload)
     .then((res) => res.data);
+  } catch (error) {
+    console.log("error",error)
+  }
+  
 });
-export const updateUser = createAsyncThunk("seo/updateseodata", async (payload) => {
-  return axios
-    .patch(`http://localhost:8000/api/updateseodata`, payload)
-    .then((res) => res.data);
-});
+
+export const updateUser = createAsyncThunk(
+  "seo/updateseodata", 
+  async ({ payload }) => {
+    try {
+      const response = await axios.patch(`http://localhost:8000/api/updateseodata/${payload}`, payload);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+);
 
 const seoSlice = createSlice({
   name: "user",
@@ -41,7 +55,6 @@ const seoSlice = createSlice({
     builder.addCase(fetchUsers.pending, (state) => {
       state.loading = true;
     });
-
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload;
@@ -62,7 +75,6 @@ const seoSlice = createSlice({
       state.user = [];
       state.isSuccess = action.payload;
     });
-
     builder.addCase(addUser.rejected, (state, action) => {
       state.loading = false;
       state.user = [];
