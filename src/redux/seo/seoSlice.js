@@ -17,9 +17,9 @@ export const addUser = createAsyncThunk("seo/seoregister", async (payload) => {
 
 export const SingleUser = createAsyncThunk("seo/getseosingledata", async (payload) => {
   try {
-    console.log(payload,"[p");
+    // console.log(payload,"[p");
   // const { id } = useParams("");
-  // console.log(id);
+  console.log(payload,"redt");
   return axios
     .get(`http://localhost:8000/api/getseosingledata/${payload}`, payload)
     .then((res) => res.data);
@@ -31,10 +31,15 @@ export const SingleUser = createAsyncThunk("seo/getseosingledata", async (payloa
 
 export const updateUser = createAsyncThunk(
   "seo/updateseodata", 
-  async ({ payload }) => {
+  async ( payload ) => {
+    console.log("PPP", payload);
+    // const { id } = useParams();
+  // console.log(id,"fddd");
     try {
       const response = await axios.patch(`http://localhost:8000/api/updateseodata/${payload}`, payload);
+      console.log(response,"fdfd")
       return response.data;
+      
     } catch (error) {
       throw new Error(error.response?.data?.message || error.message);
     }

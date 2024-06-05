@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 const EditCard = () => {
   const dispatch = useDispatch();
   const [user, setuser] = useState();
-  const [Title, setTitle] = useState("")
+  const [Title, setTitle] = useState("");
+  const [ids, setId] = useState("");
   console.log(user, "fd")
   // const { isSuccess } = useSelector((state) => state.user);
 
@@ -28,19 +29,19 @@ const EditCard = () => {
   // };
   const GetSingleUser = async () => {
     let response = await dispatch(SingleUser(id, "hello"));
-    console.log("response", response)
+    console.log("responsess", response.payload._id)
     setTitle(response?.payload?.metatitle)
     setuser(response.payload)
   }
   const handleSubmit = async (e) => {
+    console.log(e, "fds")
     try {
       e.preventDefault();
       // console.log(id, "ds")
-      let paylod =
-      {
+      let payload = {
         metatitle: Title,
       }
-      await dispatch(updateUser(paylod))
+      await dispatch(updateUser({ payload, id }));
     } catch (error) {
       console.log("errpor", error)
     }
