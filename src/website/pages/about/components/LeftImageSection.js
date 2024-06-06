@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import FeatherIcon from "feather-icons-react";
-import { fetchUsers } from "../../../../redux/seo/seoSlice";
+import { fetchUsers,deleteSeo  } from "../../../../redux/seo/seoSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink,useParams } from "react-router-dom";
 
 const LeftImageSection1 = () => {
   const dispatch = useDispatch();
@@ -11,6 +11,21 @@ const LeftImageSection1 = () => {
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
+  const { id } = useParams();
+  const handleDelete = async () => {
+    try {
+      console.log(id,"dss")
+      const resultAction = await dispatch(deleteSeo(id));
+      if (deleteSeo.fulfilled.match(resultAction)) {
+        console.log('Deleted successfully');
+      } else {
+        alert('Failed to delete item');
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      alert('An error occurred while deleting the item');
+    }
+  };
 
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
@@ -75,6 +90,7 @@ const LeftImageSection1 = () => {
                     icon="trash"
                     className="textgray mlpx3 cursor-pointer"
                     size={15}
+                    onClick={()=>handleDelete(e._id)}
                   />
                 </td>
               </tr>

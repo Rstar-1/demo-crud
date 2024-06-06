@@ -15,33 +15,39 @@ export const addUser = createAsyncThunk("seo/seoregister", async (payload) => {
     .then((res) => res.data);
 });
 
-export const SingleUser = createAsyncThunk("seo/getseosingledata", async (payload) => {
-  try {
-    // console.log(payload,"[p");
-  // const { id } = useParams("");
-  console.log(payload,"redt");
-  return axios
-    .get(`http://localhost:8000/api/getseosingledata/${payload}`, payload)
-    .then((res) => res.data);
-  } catch (error) {
-    console.log("error",error)
-  }
-  
-});
-
-export const updateUser = createAsyncThunk(
-  "seo/updateseodata", 
-  async ( payload ) => {
-    console.log("PPP", payload);
-    // const { id } = useParams();
-  // console.log(id,"fddd");
+export const SingleUser = createAsyncThunk(
+  "seo/getseosingledata",
+  async (payload) => {
     try {
       const response = await axios.patch(`http://localhost:8000/api/updateseodata/${payload}`, payload);
-      console.log(response,"fdfd")
       return response.data;
-      
     } catch (error) {
       throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "seo/updateseodata",
+  async ({ id, data }) => {
+    try {
+      const response = await axios.patch(`http://localhost:8000/api/updateseodata/${id}`, data);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const deleteSeo = createAsyncThunk(
+  "seo/deleteSeo",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(`http://localhost:8000/api/deleteseodata/${id}`);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -111,6 +117,21 @@ const seoSlice = createSlice({
       state.isSuccess = action.payload;
     });
     builder.addCase(SingleUser.rejected, (state, action) => {
+      state.loading = false;
+      state.user = [];
+      state.error = action.error.message;
+    });
+
+    builder.addCase(deleteSeo.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(deleteSeo.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = state.user.filter(item => item.id !== action.meta.arg);
+      state.isSuccess = action.payload;
+    });
+    builder.addCase(deleteSeo.rejected, (state, action) => {
       state.loading = false;
       state.user = [];
       state.error = action.error.message;

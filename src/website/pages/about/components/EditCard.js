@@ -5,52 +5,32 @@ import { useSelector, useDispatch } from "react-redux";
 
 const EditCard = () => {
   const dispatch = useDispatch();
-  const [user, setuser] = useState();
-  const [Title, setTitle] = useState("");
-  const [ids, setId] = useState("");
-  console.log(user, "fd")
-  // const { isSuccess } = useSelector((state) => state.user);
-
   const { id } = useParams();
-  console.log(id);
-  // const handleInput = (e) => {
-  //   setInputValue({ ...inputValue, [e.target.name]: e.target.value });
-  //   console.log(e.target.name, "dss");
-  //   // console.log(e.target.value, "dss");
-  // };
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // dispatch(updateUser(inputValue));
-  //   console.log(inputValue, "sdsd");
+  
+  const [user, setUser] = useState({});
+  const [Title, setTitle] = useState("");
+  const [Author, setAuthor] = useState("");
 
-  //   setTimeout(() => {
-  //     // alert("rr");
-  //   }, 2000);
-  // };
-  const GetSingleUser = async () => {
-    let response = await dispatch(SingleUser(id, "hello"));
-    console.log("responsess", response.payload._id)
-    setTitle(response?.payload?.metatitle)
-    setuser(response.payload)
-  }
-  const handleSubmit = async (e) => {
-    console.log(e, "fds")
-    try {
-      e.preventDefault();
-      // console.log(id, "ds")
-      let payload = {
-        metatitle: Title,
-      }
-      await dispatch(updateUser({ payload, id }));
-    } catch (error) {
-      console.log("errpor", error)
-    }
-
-  }
   useEffect(() => {
-    GetSingleUser()
-    // setuser(SingleUser())
-  }, []);
+    const fetchUser = async () => {
+      const response = await dispatch(SingleUser(id));
+      setUser(response.payload);
+      setTitle(response.payload.metatitle);
+      setAuthor(response.payload.metaauthor);
+    };
+    fetchUser();
+  }, [dispatch, id]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = { metatitle: Title, metaauthor:Author };
+      await dispatch(updateUser({ id, data }));
+      // Optionally handle success or failure here
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
       <div className="container mx-auto">
@@ -67,16 +47,16 @@ const EditCard = () => {
                 name="metatitle"
               />
             </div>
-            {/* <div className="plpx12 prpx12">
+            <div className="plpx12 prpx12">
               <label>Author</label>
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                 placeholder="Enter"
-                value={inputValue.metaauthor}
-                onChange={handleInput}
+                value={Author}
+                onChange={e => setAuthor(e.target.value)}
                 name="metaauthor"
               />
-            </div> */}
+            </div>
             {/* <div className="plpx12 prpx12">
               <label>Keyword</label>
               <input
