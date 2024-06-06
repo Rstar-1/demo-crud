@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
 import { updateUser, SingleUser } from "../../../../redux/seo/seoSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import Select from 'react-select'
 
 const EditCard = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  
+
   const [user, setUser] = useState({});
   const [Title, setTitle] = useState("");
   const [Author, setAuthor] = useState("");
+  const [Keyword, setKeyword] = useState("");
+  const [Conacial, setConacial] = useState("");
+  const [Description, setDescription] = useState("");
+  const [Status, setStatus] = useState(null);
+  console.log(Status, "dsa")
+  const options = [
+    { value: 'true', label: 'Publish' },
+    { value: 'false', label: 'Unpublish' }
+  ]
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -17,19 +27,36 @@ const EditCard = () => {
       setUser(response.payload);
       setTitle(response.payload.metatitle);
       setAuthor(response.payload.metaauthor);
+      setKeyword(response.payload.metakeyword);
+      setConacial(response.payload.metaconcial);
+      setDescription(response.payload.metadescription);
+      setDescription(response.payload.metadescription);
+      setStatus(response.payload.status);
     };
     fetchUser();
   }, [dispatch, id]);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = { metatitle: Title, metaauthor:Author };
+      const data = {
+        metatitle: Title,
+        metaauthor: Author,
+        metakeyword: Keyword,
+        metaconcial: Conacial,
+        metadescription: Description,
+        status: Status.value
+      };
       await dispatch(updateUser({ id, data }));
       // Optionally handle success or failure here
     } catch (error) {
       console.error("Error updating user:", error);
     }
+  };
+  const handleChange = (option) => {
+    setStatus(option);
+    console.log('Selected option:', option);
   };
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
@@ -57,13 +84,13 @@ const EditCard = () => {
                 name="metaauthor"
               />
             </div>
-            {/* <div className="plpx12 prpx12">
+            <div className="plpx12 prpx12">
               <label>Keyword</label>
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                 placeholder="Enter"
-                value={inputValue.metakeyword}
-                onChange={handleInput}
+                value={Keyword}
+                onChange={e => setKeyword(e.target.value)}
                 name="metakeyword"
               />
             </div>
@@ -72,8 +99,8 @@ const EditCard = () => {
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                 placeholder="Enter"
-                value={inputValue.metaconcial}
-                onChange={handleInput}
+                value={Conacial}
+                onChange={e => setConacial(e.target.value)}
                 name="metaconcial"
               />
             </div>
@@ -82,11 +109,17 @@ const EditCard = () => {
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                 placeholder="Enter"
-                value={inputValue.metadescription}
-                onChange={handleInput}
+                value={Description}
+                onChange={e => setDescription(e.target.value)}
                 name="metadescription"
               />
-            </div> */}
+            </div>
+            <div className="plpx12 prpx12">
+              <label>Status</label>
+              <Select value={Status}
+                onChange={handleChange}
+                options={options} />
+            </div>
           </div>
           <div className="flex justify-center mtpx20">
             <button

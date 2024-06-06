@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import FeatherIcon from "feather-icons-react";
 import { fetchUsers,deleteSeo  } from "../../../../redux/seo/seoSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink,useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const LeftImageSection1 = () => {
   const dispatch = useDispatch();
@@ -51,6 +51,9 @@ const LeftImageSection1 = () => {
               <th className="fsize13 textwhite w-30 font-300">
                 <p>Meta Description</p>
               </th>
+              <th className="fsize13 textwhite w-30 font-300">
+                <p>Status</p>
+              </th>
               <th className="fsize13 textwhite w-10 font-300">
                 <p>Actions</p>
               </th>
@@ -76,6 +79,9 @@ const LeftImageSection1 = () => {
                 </td>
                 <td className="fsize13 textforth w-30 font-300">
                   <p>{e.metadescription}</p>
+                </td>
+                <td className="fsize13 textforth w-30 font-300">
+                  <p>{e.status.toString()}</p>
                 </td>
                 <td className="fsize13 textforth">
                   <NavLink to={`/edit/${e._id}`}>

@@ -44,7 +44,7 @@ export const deleteSeo = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.delete(`http://localhost:8000/api/deleteseodata/${id}`);
-      console.log(response,"fred");
+      console.log(response, "fred");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
