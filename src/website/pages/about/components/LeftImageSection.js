@@ -11,13 +11,13 @@ const LeftImageSection1 = () => {
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
-  const { id } = useParams();
-  const handleDelete = async () => {
+  const handleDelete = async (id) => {
     try {
       console.log(id,"dss")
       const resultAction = await dispatch(deleteSeo(id));
       if (deleteSeo.fulfilled.match(resultAction)) {
-        console.log('Deleted successfully');
+        alert('Deleted successfully');
+        dispatch(fetchUsers());
       } else {
         alert('Failed to delete item');
       }

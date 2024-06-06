@@ -43,8 +43,8 @@ export const deleteSeo = createAsyncThunk(
   "seo/deleteSeo",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`http://localhost:8000/api/deleteseodata/${id}`);
-      console.log(response);
+      const response = await axios.delete(`http://localhost:8000/api/deleteseodata/${id}`);
+      console.log(response,"fred");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -128,7 +128,7 @@ const seoSlice = createSlice({
     });
     builder.addCase(deleteSeo.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = state.user.filter(item => item.id !== action.meta.arg);
+      state.user = [];
       state.isSuccess = action.payload;
     });
     builder.addCase(deleteSeo.rejected, (state, action) => {
