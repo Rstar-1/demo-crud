@@ -1752,3 +1752,25 @@ tr:nth-child(even):hover {
   margin-right: auto !important;
 }
 /* ======================= End-Footer ======================= */
+
+body > .skiptranslate {
+  display: none;
+}
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+body {
+  top: 0px !important;
+}
+@media print {
+  #google_translate_element {
+    display: none;
+  }
+}
+.goog-te-combo:nth-child(2){
+  display: none;
+}
+.skiptranslate.goog-te-gadget:nth-child(2){
+  display: none !important;
+}

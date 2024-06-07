@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import logo from "../../assets/logo.png";
+import GoogleTranslate from "../GoogleTranslate";
 
 const Navbar = () => {
   const [sidebarshow, setsidebarshow] = useState(false);
@@ -97,6 +98,8 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+        
+        {/* <GoogleTranslate /> */}
       </div>
     </div>
   );

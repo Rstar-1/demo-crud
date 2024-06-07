@@ -1,17 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import FeatherIcon from "feather-icons-react";
-import { fetchUsers, deleteSeo } from "../../../../redux/seo/seoSlice";
+import { fetchUsers, updateUser, deleteSeo } from "../../../../redux/seo/seoSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
+import EditPop from "./EditPop";
 
 const LeftImageSection1 = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user);
-
+  const [seosidebar, setseosidebar] = useState(false)
+  console.log(seosidebar, "dsa")
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
-  
+
   const handleDelete = async (id) => {
     try {
       console.log(id, "dss")
@@ -28,8 +30,26 @@ const LeftImageSection1 = () => {
     }
   };
 
+  const handlePublish = async (id, stat) => {
+    try {
+      const data = {
+        status: stat,
+      };
+      await dispatch(updateUser({ id, data }));
+      dispatch(fetchUsers());
+      // Optionally handle success or failure here
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
+      {seosidebar ? (
+        <div className="bg-glass2 fixed top-0 right-0 h-100 flex items-center justify-center w-full z-99">
+          <EditPop seosidebar={seosidebar} />
+        </div>
+      ) : null}
       <div className="container mx-auto">
         <table>
           <thead>
@@ -55,7 +75,7 @@ const LeftImageSection1 = () => {
               <th className="fsize13 textwhite w-30 font-300">
                 <p>Status</p>
               </th>
-              <th className="fsize13 textwhite w-10 font-300">
+              <th className="fsize13 textwhite w-30 font-300">
                 <p>Actions</p>
               </th>
             </tr>
@@ -82,9 +102,17 @@ const LeftImageSection1 = () => {
                   <p>{e.metadescription}</p>
                 </td>
                 <td className="fsize13 textforth w-30 font-300">
-                  <p>{e.status.toString()}</p>
+                  <p onClick={() => handlePublish(e._id, !e.status)}>{e.status === true ? "Publish" : null}</p>
+                  <p onClick={() => handlePublish(e._id, !e.status)}>{e.status === false ? "Unpublish" : null}</p>
                 </td>
-                <td className="fsize13 textforth">
+                <td className="fsize13 w-30 textforth">
+                  <div onClick={() => setseosidebar(e)}>
+                    <FeatherIcon
+                      icon="edit"
+                      className="textgray cursor-pointer"
+                      size={15}
+                    />
+                  </div>
                   <NavLink to={`/edit/${e._id}`}>
                     <FeatherIcon
                       icon="edit"

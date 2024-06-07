@@ -11,7 +11,6 @@ import EditCard from "./website/pages/about/components/EditCard";
 const App = () => {
   return (
     <div className="App">
-     
         <ScrollToTop />
         <Navbar />
         <Routes>
