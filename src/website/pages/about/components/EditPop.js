@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { updateUser,fetchUsers } from "../../../../redux/seo/seoSlice";
+import { updateUser, fetchUsers } from "../../../../redux/seo/seoSlice";
 import { useDispatch } from "react-redux";
 import Select from 'react-select'
 
