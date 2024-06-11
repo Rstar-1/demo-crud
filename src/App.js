@@ -5,8 +5,10 @@ import Navbar from "./website/navbar/Navbar";
 // import Footer from "./website/footer/Footer";
 import Home from "./website/pages/home/Home";
 import About from "./website/pages/about/About";
+import Projects from "./website/pages/about/components/Projects";
 import Blog from "./website/pages/blog/Blog";
 import EditCard from "./website/pages/about/components/EditCard";
+import HeroSection from "./website/pages/home/components/HeroSection2";
 
 const App = () => {
   return (
@@ -17,6 +19,8 @@ const App = () => {
           {/* ======================= Start-pages ======================= */}
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/home2" element={<HeroSection />} />
+          <Route path="/abut22" element={<Projects />} />
           <Route path="/about" element={<About />} />
           <Route path="/edit/:id" element={<EditCard />} />
           <Route path="/blogs" element={<Blog />} />
