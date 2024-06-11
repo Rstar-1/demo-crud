@@ -1,16 +1,55 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const addproject = createAsyncThunk("project/projectregister", async (payload) => {
-  return axios
-    .post(`http://localhost:8000/api/projectregister`, payload)
-    .then((res) => res.data);
-});
-export const getproject = createAsyncThunk("project/getprojectdata", async () => {
-  return axios
-    .get("http://localhost:8000/api/getprojectalldata")
-    .then((res) => res.data);
-});
+export const addproject = createAsyncThunk(
+  "project/projectregister",
+  async (payload) => {
+    return axios
+      .post(`http://localhost:8000/api/projectregister`, payload)
+      .then((res) => res.data);
+  }
+);
+export const getproject = createAsyncThunk(
+  "project/getprojectdata",
+  async () => {
+    return axios
+      .get("http://localhost:8000/api/getprojectalldata")
+      .then((res) => res.data);
+  }
+);
+export const updateproject = createAsyncThunk(
+  "project/updateprojectdata",
+  async ({ id, formData }) => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/api/updateprojectdata/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Ensure correct content type for file upload
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+);
+export const deleteproject = createAsyncThunk(
+  "project/deleteprojectdata",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/api/deleteprojectdata/${id}`
+      );
+      console.log(response, "fred");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
 
 const projectSlice = createSlice({
   name: "project",
@@ -47,6 +86,36 @@ const projectSlice = createSlice({
       state.error = "";
     });
     builder.addCase(getproject.rejected, (state, action) => {
+      state.loading = false;
+      state.project = [];
+      state.error = action.error.message;
+    });
+
+    builder.addCase(updateproject.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(updateproject.fulfilled, (state, action) => {
+      state.loading = false;
+      state.project = [];
+      state.isSuccess = action.payload;
+    });
+    builder.addCase(updateproject.rejected, (state, action) => {
+      state.loading = false;
+      state.project = [];
+      state.error = action.error.message;
+    });
+
+    builder.addCase(deleteproject.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(deleteproject.fulfilled, (state, action) => {
+      state.loading = false;
+      state.project = [];
+      state.isSuccess = action.payload;
+    });
+    builder.addCase(deleteproject.rejected, (state, action) => {
       state.loading = false;
       state.project = [];
       state.error = action.error.message;
