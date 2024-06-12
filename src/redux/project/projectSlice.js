@@ -17,6 +17,17 @@ export const getproject = createAsyncThunk(
       .then((res) => res.data);
   }
 );
+export const Singleproject = createAsyncThunk(
+  "project/getprojectsingledata",
+  async (payload) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/getprojectsingledata/${payload}`, payload);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+);
 export const updateproject = createAsyncThunk(
   "project/updateprojectdata",
   async ({ id, formData }) => {
@@ -88,6 +99,21 @@ const projectSlice = createSlice({
     builder.addCase(getproject.rejected, (state, action) => {
       state.loading = false;
       state.project = [];
+      state.error = action.error.message;
+    });
+
+    builder.addCase(Singleproject.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(Singleproject.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = [];
+      state.isSuccess = action.payload;
+    });
+    builder.addCase(Singleproject.rejected, (state, action) => {
+      state.loading = false;
+      state.user = [];
       state.error = action.error.message;
     });
 

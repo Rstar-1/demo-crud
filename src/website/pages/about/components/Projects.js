@@ -84,20 +84,20 @@ const Projects = () => {
                   <p>{e.description}</p>
                 </td>
                 <td className="fsize13 w-30 textforth">
-                  <div onClick={() => setprojectsidebars(e)}>
+                  {/* <div onClick={() => setprojectsidebars(e)}>
                     <FeatherIcon
                       icon="edit"
                       className="textgray cursor-pointer"
                       size={15}
                     />
-                  </div>
-                  {/* <NavLink to={`/edit/${e._id}`}>
+                  </div> */}
+                  <NavLink to={`/editproject/${e._id}`}>
                     <FeatherIcon
                       icon="edit"
                       className="textgray cursor-pointer"
                       size={15}
                     />
-                  </NavLink> */}
+                  </NavLink>
 
                   <FeatherIcon
                     icon="trash"

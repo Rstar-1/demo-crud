@@ -9,6 +9,7 @@ import Projects from "./website/pages/about/components/Projects";
 import Blog from "./website/pages/blog/Blog";
 import EditCard from "./website/pages/about/components/EditCard";
 import HeroSection from "./website/pages/home/components/HeroSection2";
+import EditProject2 from "./website/pages/about/components/EditProject2";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/abut22" element={<Projects />} />
           <Route path="/about" element={<About />} />
           <Route path="/edit/:id" element={<EditCard />} />
+          <Route path="/editproject/:id" element={<EditProject2 />} />
           <Route path="/blogs" element={<Blog />} />
           {/* ======================= End-pages ======================= */}
 
