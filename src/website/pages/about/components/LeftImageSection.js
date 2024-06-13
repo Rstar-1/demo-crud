@@ -8,11 +8,19 @@ import EditPop from "./EditPop";
 const LeftImageSection1 = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user);
+  const {loading, error } = useSelector((state) => state.user);
   const [seosidebar, setseosidebar] = useState(false)
   console.log(seosidebar, "dsa")
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   const handleDelete = async (id) => {
     try {

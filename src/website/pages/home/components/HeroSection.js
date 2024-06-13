@@ -1,26 +1,29 @@
 import React, { useState } from "react";
 import { addUser } from "../../../../redux/seo/seoSlice";
 import { useSelector, useDispatch } from "react-redux";
+import ReactStars from "react-rating-stars-component";
 
 const HeroSection = () => {
   const dispatch = useDispatch();
 
   // const { isSuccess } = useSelector((state) => state.user);
   const [inputValue, setInputValue] = useState({
-    metatitle: "",
+    metatitle: 0,
     metaauthor: "",
     metakeyword: "",
     metaconcial: "",
     metadescription: "",
   });
-
   const handleInput = (e) => {
     setInputValue({ ...inputValue, [e.target.name]: e.target.value });
     console.log(e.target.name, "ds");
     // console.log(e.target.value, "dss");
   };
+  const handleStar = (e) => {
+    setInputValue({metatitle: e});
+  };
   const handleSubmit = (e) => {
-    console.log(inputValue,'555');
+    console.log(inputValue, '555');
     e.preventDefault();
     dispatch(addUser(inputValue));
     console.log(inputValue);
@@ -37,13 +40,20 @@ const HeroSection = () => {
           <div className="grid-cols-2 gap-12 mtpx20">
             <div className="plpx12 prpx12">
               <label>Title</label>
-              <input
+              <ReactStars
+                count={5}
+                value={inputValue.metatitle}
+                onChange={handleStar}
+                size={24}
+                activeColor="#ffd700"
+              />
+              {/* <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                 placeholder="Enter"
                 value={inputValue.metatitle}
                 onChange={handleInput}
                 name="metatitle"
-              />
+              /> */}
             </div>
             <div className="plpx12 prpx12">
               <label>Author</label>

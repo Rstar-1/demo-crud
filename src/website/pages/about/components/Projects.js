@@ -11,6 +11,7 @@ import EditProject from "../components/EditProject";
 const Projects = () => {
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.project);
+  const {loading, error } = useSelector((state) => state.project);
   const [projectsidebars, setprojectsidebars] = useState(false);
   console.log(projectsidebars, "dsa");
 
@@ -33,6 +34,13 @@ const Projects = () => {
   useEffect(() => {
     dispatch(getproject());
   }, [dispatch]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
