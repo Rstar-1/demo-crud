@@ -64,6 +64,8 @@ const seoSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.pending, (state) => {
       state.loading = true;
+      state.user = [];
+      state.error = "";
     });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       state.loading = false;
