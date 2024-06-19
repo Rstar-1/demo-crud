@@ -9,6 +9,13 @@ export const addproject = createAsyncThunk(
       .then((res) => res.data);
   }
 );
+export const getallproject = createAsyncThunk(
+  "project/getallproject",
+  async ({ offset, search }) => {
+    const response = await axios.post("http://localhost:8000/api/getprojectdata", { offset, search });
+    return response.data;
+  }
+);
 export const getproject = createAsyncThunk(
   "project/getprojectdata",
   async () => {
@@ -69,6 +76,7 @@ const projectSlice = createSlice({
     project: [],
     error: "",
     isSuccess: "",
+    totalCount: 0,
   },
 
   // reducer call
@@ -99,6 +107,20 @@ const projectSlice = createSlice({
     builder.addCase(getproject.rejected, (state, action) => {
       state.loading = false;
       state.project = [];
+      state.error = action.error.message;
+    });
+
+    builder.addCase(getallproject.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getallproject.fulfilled, (state, action) => {
+      state.loading = false;
+      state.project = action.payload.data;
+      state.totalCount = action.payload.totalCount;
+    });
+    builder.addCase(getallproject.rejected, (state, action) => {
+      state.loading = false;
       state.error = action.error.message;
     });
 

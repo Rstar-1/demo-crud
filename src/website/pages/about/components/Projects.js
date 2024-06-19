@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import FeatherIcon from "feather-icons-react";
 import {
-  getproject,
+  getallproject,
   deleteproject,
 } from "../../../../redux/project/projectSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import EditProject from "../components/EditProject";
+import ReactPaginate from "react-paginate";
 
 const Projects = () => {
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.project);
-  const {loading, error } = useSelector((state) => state.project);
+  const { totalCount } = useSelector((state) => state.project);
   const [projectsidebars, setprojectsidebars] = useState(false);
   console.log(projectsidebars, "dsa");
+  const [currentpage, setcurrentpage] = useState(0)
+  const [search, setSearch] = useState('');
 
   const handleDelete = async (id) => {
     try {
@@ -21,7 +24,7 @@ const Projects = () => {
       const resultAction = await dispatch(deleteproject(id));
       if (deleteproject.fulfilled.match(resultAction)) {
         alert("Deleted successfully");
-        dispatch(getproject());
+        dispatch(getallproject());
       } else {
         alert("Failed to delete item");
       }
@@ -32,15 +35,26 @@ const Projects = () => {
   };
 
   useEffect(() => {
-    dispatch(getproject());
-  }, [dispatch]);
+    dispatch(getallproject({ offset: currentpage * 6, search }));
+  }, [dispatch, currentpage, search]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+
+  // Function
+
+  const handlePageClick = (e) => {
+    setcurrentpage(e.selected);
+  };
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setcurrentpage(0); // Reset to first page on new search
+  };
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
 
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
@@ -50,6 +64,12 @@ const Projects = () => {
         </div>
       ) : null}
       <div className="container mx-auto">
+        <input
+          type="text"
+          value={search}
+          onChange={handleSearchChange}
+          placeholder="Search by subtitle"
+        />
         <table>
           <thead>
             <tr>
@@ -74,7 +94,7 @@ const Projects = () => {
             </tr>
           </thead>
           <tbody>
-            {projects.project.map((e, index) => (
+            {projects.project ? projects.project.map((e, index) => (
               <tr key={e.id}>
                 <td className="fsize13 textforth w-10 font-300">
                   <p>{index + 1}</p>
@@ -115,9 +135,23 @@ const Projects = () => {
                   />
                 </td>
               </tr>
-            ))}
+            )) : ""}
           </tbody>
         </table>
+
+      </div>
+      <div className="flex w-full justify-end">
+        <ReactPaginate
+          className="pagination"
+          breakLabel="..."
+          nextLabel=">"
+          previousLabel="<"
+          pageCount={Math.ceil(totalCount / 6)}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={6}
+          renderOnZeroPageCount={null}
+          forcePage={currentpage}
+        />
       </div>
     </div>
   );
