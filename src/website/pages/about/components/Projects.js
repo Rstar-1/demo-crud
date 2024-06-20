@@ -11,8 +11,8 @@ import ReactPaginate from "react-paginate";
 
 const Projects = () => {
   const dispatch = useDispatch();
-  const projects = useSelector((state) => state.project);
-  const { totalCount } = useSelector((state) => state.project);
+  const  projects  = useSelector((state) => state.project.project);
+  const  totalCount = useSelector((state) => state.project.totalCount);
   const [projectsidebars, setprojectsidebars] = useState(false);
   console.log(projectsidebars, "dsa");
   const [currentpage, setcurrentpage] = useState(0)
@@ -49,13 +49,7 @@ const Projects = () => {
     setcurrentpage(0); // Reset to first page on new search
   };
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
-
+  console.log(totalCount,"fdfdf")
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
       {projectsidebars ? (
@@ -94,7 +88,7 @@ const Projects = () => {
             </tr>
           </thead>
           <tbody>
-            {projects.project ? projects.project.map((e, index) => (
+            {projects?.map((e, index) => (
               <tr key={e.id}>
                 <td className="fsize13 textforth w-10 font-300">
                   <p>{index + 1}</p>
@@ -135,7 +129,7 @@ const Projects = () => {
                   />
                 </td>
               </tr>
-            )) : ""}
+            ))}
           </tbody>
         </table>
 

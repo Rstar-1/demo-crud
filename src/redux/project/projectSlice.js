@@ -10,9 +10,9 @@ export const addproject = createAsyncThunk(
   }
 );
 export const getallproject = createAsyncThunk(
-  "project/getallproject",
+  'project/getallproject',
   async ({ offset, search }) => {
-    const response = await axios.post("http://localhost:8000/api/getprojectdata", { offset, search });
+    const response = await axios.post('http://localhost:8000/api/getprojectdata', { offset, search });
     return response.data;
   }
 );
@@ -116,7 +116,7 @@ const projectSlice = createSlice({
     });
     builder.addCase(getallproject.fulfilled, (state, action) => {
       state.loading = false;
-      state.project = action.payload.data;
+      state.project = action.payload.projects;
       state.totalCount = action.payload.totalCount;
     });
     builder.addCase(getallproject.rejected, (state, action) => {
