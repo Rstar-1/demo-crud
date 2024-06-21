@@ -1,50 +1,121 @@
 import React, { useState, useEffect } from "react";
-import {
-  updateproject,
-  getproject,
-  Singleproject
-} from "../../../../redux/project/projectSlice";
+import { updateproject, getproject, Singleproject } from "../../../../redux/project/projectSlice";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 const EditProject2 = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [Title, setTitle] = useState("");
-  const [SubTitle, setSubTitle] = useState("");
-  const [Description, setDescription] = useState("");
-  const [Image, setImage] = useState(null);
+  
+  const [formData, setFormData] = useState({
+    title: "",
+    subTitle: "",
+    description: "",
+    image: null,
+    imagePreviewUrl: ""
+  });
+
+  const [errors, setErrors] = useState({
+    title: "",
+    subTitle: "",
+    description: "",
+    image: ""
+  });
 
   useEffect(() => {
-    const fetchproject = async () => {
+    const fetchProject = async () => {
       try {
         const response = await dispatch(Singleproject(id));
-        console.log(response,"fdfds")
-        setTitle(response.payload.title);
-        setSubTitle(response.payload.subtitle);
-        setDescription(response.payload.description);
-        setImage(response.payload.picture);
+        const project = response.payload;
+        setFormData({
+          title: project.title,
+          subTitle: project.subtitle,
+          description: project.description,
+          image: project.picture,
+          imagePreviewUrl: project.picture // Assuming `picture` is a URL
+        });
       } catch (error) {
         console.error("Failed to fetch project:", error);
       }
     };
-    fetchproject();
+    fetchProject();
   }, [dispatch, id]);
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prevState => ({
+          ...prevState,
+          image: file,
+          imagePreviewUrl: reader.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setFormData(prevState => ({
+        ...prevState,
+        image: null,
+        imagePreviewUrl: ""
+    }));
+};
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const validate = () => {
+    let valid = true;
+    const newErrors = {
+      title: "",
+      subTitle: "",
+      description: "",
+      image: ""
+    };
+
+    if (!formData.title) {
+      newErrors.title = "Enter Title";
+      valid = false;
+    }
+    if (!formData.subTitle) {
+      newErrors.subTitle = "Enter Subtitle";
+      valid = false;
+    }
+    if (!formData.description) {
+      newErrors.description = "Enter Description";
+      valid = false;
+    }
+    if (!formData.image) {
+      newErrors.image = "Upload an Image";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("picture", Image);
-      formData.append("title", Title);
-      formData.append("subtitle", SubTitle);
-      formData.append("description", Description);
+    if (!validate()) {
+      return;
+    }
 
-      await dispatch(updateproject({ id, formData }));
+    try {
+      const updatedData = new FormData();
+      updatedData.append("picture", formData.image);
+      updatedData.append("title", formData.title);
+      updatedData.append("subtitle", formData.subTitle);
+      updatedData.append("description", formData.description);
+
+      await dispatch(updateproject({ id, formData: updatedData }));
       dispatch(getproject());
       alert("Project updated successfully!");
     } catch (error) {
@@ -52,62 +123,80 @@ const EditProject2 = () => {
       alert("Failed to update project");
     }
   };
+
   return (
     <div className="bg-white p10">
       <div className="container mx-auto">
-        <form
-          onSubmit={handleSubmit}
-          className="mx-auto bshadow w-40 bgwhite p20"
-        >
-          <h4 className="mtpx1 mbpx1 text-center fsize25 font-600">Add user</h4>
+        <form onSubmit={handleSubmit} className="mx-auto bshadow w-40 bgwhite p20">
+          <h4 className="mtpx1 mbpx1 text-center fsize25 font-600">Edit Project</h4>
           <div className="plpx12 prpx12">
             <label>Image</label>
             <input
               className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
-              placeholder="Enter"
               type="file"
               onChange={handleFileChange}
-              name="imagecms"
-              id="imagecms"
+              name="image"
+              id="image"
               aria-label="Image"
             />
+            {formData.imagePreviewUrl && (
+              <div className="relative mtpx10">
+                <img
+                  src={formData.imagePreviewUrl}
+                  alt="Image Preview"
+                  className="w-full"
+                  style={{ height: 'auto', maxHeight: '300px', objectFit: 'cover' }}
+                />
+                 <button
+                                    type="button"
+                                    className="absolute top-0 right-0 mtpx2 mpx2 bgred-600 text-white rounded-full ppx2"
+                                    onClick={handleRemoveImage}
+                                >
+                                    X
+                                </button>
+              </div>
+            )}
+            <p className="fsize12 textdanger font-300 mtpx3 mlpx2">{errors.image}</p>
           </div>
           <div className="grid-cols-2 gap-12 mtpx20">
             <div className="plpx12 prpx12">
               <label>Title</label>
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
-                placeholder="Enter"
-                value={Title}
-                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter Title"
+                value={formData.title}
+                onChange={handleInputChange}
                 name="title"
                 id="title"
                 aria-label="Title"
               />
+              <p className="fsize12 textdanger font-300 mtpx3 mlpx2">{errors.title}</p>
             </div>
             <div className="plpx12 prpx12">
-              <label>subTitle</label>
+              <label>Subtitle</label>
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
-                placeholder="Enter"
-                value={SubTitle}
-                onChange={(e) => setSubTitle(e.target.value)}
-                name="subtitle"
-                id="subtitle"
+                placeholder="Enter Subtitle"
+                value={formData.subTitle}
+                onChange={handleInputChange}
+                name="subTitle"
+                id="subTitle"
                 aria-label="Subtitle"
               />
+              <p className="fsize12 textdanger font-300 mtpx3 mlpx2">{errors.subTitle}</p>
             </div>
             <div className="plpx12 prpx12">
               <label>Description</label>
               <input
                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
-                placeholder="Enter"
-                value={Description}
-                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Enter Description"
+                value={formData.description}
+                onChange={handleInputChange}
                 name="description"
                 id="description"
                 aria-label="Description"
               />
+              <p className="fsize12 textdanger font-300 mtpx3 mlpx2">{errors.description}</p>
             </div>
           </div>
           <div className="flex justify-center mtpx20">
