@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 const EditProject2 = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  
+
   const [formData, setFormData] = useState({
     title: "",
     subTitle: "",
@@ -58,11 +58,11 @@ const EditProject2 = () => {
 
   const handleRemoveImage = () => {
     setFormData(prevState => ({
-        ...prevState,
-        image: null,
-        imagePreviewUrl: ""
+      ...prevState,
+      image: null,
+      imagePreviewUrl: ""
     }));
-};
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -143,17 +143,17 @@ const EditProject2 = () => {
               <div className="relative mtpx10">
                 <img
                   src={formData.imagePreviewUrl}
-                  alt="Image Preview"
+                  alt="ImagePreview"
                   className="w-full"
                   style={{ height: 'auto', maxHeight: '300px', objectFit: 'cover' }}
                 />
-                 <button
-                                    type="button"
-                                    className="absolute top-0 right-0 mtpx2 mpx2 bgred-600 text-white rounded-full ppx2"
-                                    onClick={handleRemoveImage}
-                                >
-                                    X
-                                </button>
+                <button
+                  type="button"
+                  className="absolute top-0 right-0 mtpx2 mpx2 bgred-600 text-white rounded-full ppx2"
+                  onClick={handleRemoveImage}
+                >
+                  X
+                </button>
               </div>
             )}
             <p className="fsize12 textdanger font-300 mtpx3 mlpx2">{errors.image}</p>

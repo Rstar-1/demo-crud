@@ -124,7 +124,7 @@ const EditProject = (props) => {
               <div className="relative mtpx10">
                 <img
                   src={formData.imagePreviewUrl}
-                  alt="Image Preview"
+                  alt="ImagePreview"
                   className="w-full"
                   style={{ height: 'auto', maxHeight: '300px', objectFit: 'cover' }}
                 />

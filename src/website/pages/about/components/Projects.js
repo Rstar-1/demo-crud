@@ -94,7 +94,7 @@ const Projects = () => {
                   <p>{index + 1}</p>
                 </td>
                 <td className="fsize13 textforth w-10 font-300">
-                  <img className="w-20" src={e.picture} />
+                  <img className="w-20" alt="dc" src={e.picture} />
                 </td>
                 <td className="fsize13 textforth w-10 font-300">
                   <p>{e.subtitle}</p>
