@@ -38,6 +38,7 @@ export const Singleproject = createAsyncThunk(
 export const updateproject = createAsyncThunk(
   "project/updateprojectdata",
   async ({ id, formData }) => {
+    console.log(formData,'rrrr');
     try {
       const response = await axios.patch(
         `http://localhost:8000/api/updateprojectdata/${id}`,
@@ -48,6 +49,17 @@ export const updateproject = createAsyncThunk(
           },
         }
       );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+);
+export const updateprojectstatus = createAsyncThunk(
+  "seo/updateprojectstatus",
+  async ({ id, data }) => {
+    try {
+      const response = await axios.patch(`http://localhost:8000/api/updateprojectstatus/${id}`, data);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || error.message);
@@ -151,6 +163,21 @@ const projectSlice = createSlice({
     builder.addCase(updateproject.rejected, (state, action) => {
       state.loading = false;
       state.project = [];
+      state.error = action.error.message;
+    });
+
+    builder.addCase(updateprojectstatus.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(updateprojectstatus.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = [];
+      state.isSuccess = action.payload;
+    });
+    builder.addCase(updateprojectstatus.rejected, (state, action) => {
+      state.loading = false;
+      state.user = [];
       state.error = action.error.message;
     });
 

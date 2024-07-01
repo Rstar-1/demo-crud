@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { addproject } from "../../../../redux/project/projectSlice";
 import { useDispatch } from "react-redux";
+import { addproject } from "../../../../redux/project/projectSlice";
 
 const HeroSection = () => {
     const dispatch = useDispatch();
@@ -12,16 +12,11 @@ const HeroSection = () => {
         imagePreviewUrl: ""
     });
 
-    const [errors, setErrors] = useState({
-        title: "",
-        subTitle: "",
-        description: "",
-        image: ""
-    });
+    const [errors, setErrors] = useState({});
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        if (file) {
+        if (file && file.type.startsWith("image/")) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setFormData(prevState => ({
@@ -31,6 +26,11 @@ const HeroSection = () => {
                 }));
             };
             reader.readAsDataURL(file);
+        } else {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                image: "Please select a valid image file"
+            }));
         }
     };
 
@@ -39,6 +39,10 @@ const HeroSection = () => {
             ...prevState,
             image: null,
             imagePreviewUrl: ""
+        }));
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            image: ""
         }));
     };
 
@@ -52,7 +56,7 @@ const HeroSection = () => {
 
     const validateForm = () => {
         let valid = true;
-        let newErrors = { title: "", subTitle: "", description: "", image: "" };
+        const newErrors = {};
 
         if (formData.title.trim() === "") {
             newErrors.title = "Enter Title";
@@ -88,10 +92,8 @@ const HeroSection = () => {
 
         try {
             const response = await dispatch(addproject(formToSubmit));
-            console.log(response,"dsds")
             if (response.type === "project/projectregister/fulfilled") {
                 alert("Success");
-                // Clear the form fields
                 setFormData({
                     title: "",
                     subTitle: "",
@@ -99,12 +101,7 @@ const HeroSection = () => {
                     image: null,
                     imagePreviewUrl: ""
                 });
-                setErrors({
-                    title: "",
-                    subTitle: "",
-                    description: "",
-                    image: ""
-                });
+                setErrors({});
             } else {
                 alert("Error");
             }
@@ -120,7 +117,7 @@ const HeroSection = () => {
                 <form onSubmit={handleSubmit} className="mx-auto bshadow w-40 bgwhite p20">
                     <h4 className="mtpx1 mbpx1 text-center fsize25 font-600">Add Project</h4>
                     <div className="plpx12 prpx12">
-                        <label>Image</label>
+                        <label htmlFor="image">Image</label>
                         <input
                             className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                             type="file"
@@ -141,6 +138,7 @@ const HeroSection = () => {
                                     type="button"
                                     className="absolute top-0 right-0 mtpx2 mpx2 bgred-600 text-white rounded-full ppx2"
                                     onClick={handleRemoveImage}
+                                    aria-label="Remove Image"
                                 >
                                     X
                                 </button>
@@ -150,7 +148,7 @@ const HeroSection = () => {
                     </div>
                     <div className="grid-cols-2 gap-12 mtpx20">
                         <div className="plpx12 prpx12">
-                            <label>Title</label>
+                            <label htmlFor="title">Title</label>
                             <input
                                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                                 placeholder="Enter"
@@ -163,7 +161,7 @@ const HeroSection = () => {
                             {errors.title && <p className="fsize12 textdanger font-300 mtpx3 mlpx2">{errors.title}</p>}
                         </div>
                         <div className="plpx12 prpx12">
-                            <label>Subtitle</label>
+                            <label htmlFor="subTitle">Subtitle</label>
                             <input
                                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                                 placeholder="Enter"
@@ -176,7 +174,7 @@ const HeroSection = () => {
                             {errors.subTitle && <p className="fsize12 textdanger font-300 mtpx3 mlpx2">{errors.subTitle}</p>}
                         </div>
                         <div className="plpx12 prpx12">
-                            <label>Description</label>
+                            <label htmlFor="description">Description</label>
                             <input
                                 className="w-full h-input fsize14 rounded-5 plpx10 border-ec"
                                 placeholder="Enter"
@@ -193,6 +191,7 @@ const HeroSection = () => {
                         <button
                             className="border-0 cursor-pointer font-500 textwhite rounded-5 ptpx6 pbpx6 plpx25 prpx25 fsize13 bgprimary"
                             type="submit"
+                            aria-label="Submit"
                         >
                             Submit
                         </button>

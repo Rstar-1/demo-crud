@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import FeatherIcon from "feather-icons-react";
 import {
   getallproject,
+  updateprojectstatus,
   deleteproject,
 } from "../../../../redux/project/projectSlice";
 import { useSelector, useDispatch } from "react-redux";
@@ -48,6 +49,31 @@ const Projects = () => {
     setSearch(e.target.value);
     setcurrentpage(0); // Reset to first page on new search
   };
+  const handlePublish = async (id, stat) => {
+    try {
+      const data = {
+        status: stat,
+      };
+      await dispatch(updateprojectstatus({ id, data }));
+      await dispatch(getallproject({ offset: currentpage * 6, search }));
+      // Optionally handle success or failure here
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+  // const handlePublish = async (id, newstaus) => {
+
+  //   try {
+  //     const formData = new FormData();
+  //       formData.append("status", newstaus); // Use status directly
+
+  //       await dispatch(updateproject({ id, formData }));
+  //       await dispatch(getallproject({ offset: currentpage * 6, search }));
+  //   } catch (error) {
+  //     console.error("Error updating project:", error);
+  //     alert("Failed to update project");
+  //   }
+  // };
 
   console.log(totalCount,"fdfdf")
   return (
@@ -83,6 +109,9 @@ const Projects = () => {
                 <p>Meta Author</p>
               </th>
               <th className="fsize13 textwhite w-30 font-300">
+                <p>Status</p>
+              </th>
+              <th className="fsize13 textwhite w-30 font-300">
                 <p>Actions</p>
               </th>
             </tr>
@@ -104,6 +133,10 @@ const Projects = () => {
                 </td>
                 <td className="fsize13 textforth w-10 font-300">
                   <p>{e.description}</p>
+                </td>
+                <td className="fsize13 textforth w-30 font-300">
+                  <p onClick={() => handlePublish(e._id, !e.status)}>{e.status === true ? "Publish" : null}</p>
+                  <p onClick={() => handlePublish(e._id, !e.status)}>{e.status === false ? "Unpublish" : null}</p>
                 </td>
                 <td className="fsize13 w-30 textforth">
                   <div onClick={() => setprojectsidebars(e)}>
