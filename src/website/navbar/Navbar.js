@@ -20,7 +20,7 @@ const Navbar = () => {
     {
       icon: "folder",
       name: "Blogs",
-      route: "blogs",
+      route: "abut22",
     },
   ];
 
