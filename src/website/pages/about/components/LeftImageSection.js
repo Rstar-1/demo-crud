@@ -4,6 +4,8 @@ import { fetchUsers, updateUser, deleteSeo } from "../../../../redux/seo/seoSlic
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import EditPop from "./EditPop";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const LeftImageSection1 = () => {
   const dispatch = useDispatch();
@@ -90,6 +92,21 @@ const LeftImageSection1 = () => {
     }
 
   };
+  const handleDownloadPdf = () => {
+    const input = document.getElementById('pdfContent');
+    html2canvas(input)
+      .then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('download.pdf');
+      })
+      .catch(error => {
+        console.error('Error generating PDF:', error);
+      });
+  };
 
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
@@ -98,7 +115,7 @@ const LeftImageSection1 = () => {
           <EditPop seosidebar={seosidebar} />
         </div>
       ) : null}
-      <div className="container mx-auto">
+      <div className="container mx-auto"  id="pdfContent">
         <table>
           <thead>
             <tr>
@@ -181,6 +198,7 @@ const LeftImageSection1 = () => {
           </tbody>
         </table>
         <button onClick={()=>downloadFile("http://localhost:3000/edit/666a89104f8aa16c3ae133bd")}>fds</button>
+        <button onClick={handleDownloadPdf}>Download as PDF</button>
       </div>
     </div>
   );
