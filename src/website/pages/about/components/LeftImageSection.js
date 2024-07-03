@@ -50,6 +50,46 @@ const LeftImageSection1 = () => {
       console.error("Error updating user:", error);
     }
   };
+  const downloadFile = async fileName => {
+
+    try {
+
+     
+      const response = await fetch(fileName);
+
+      const blob = await response.blob();
+
+      const isIE = /*@cc_on!@*/ false || !!document.documentMode;
+
+      if (isIE) {
+
+        window.navigator.msSaveBlob(blob, fileName);
+
+      } else {
+
+        const link = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+
+        a.setAttribute('download', fileName);
+
+        a.setAttribute('href', link);
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        document.body.removeChild(a);
+
+      }
+
+    } catch (error) {
+
+      console.error('Error downloading the file:', error);
+
+    }
+
+  };
 
   return (
     <div className="ptpx60 pbpx60 md-ptpx20 md-pbpx20 sm-ptpx20 bg-fa sm-pbpx20">
@@ -140,6 +180,7 @@ const LeftImageSection1 = () => {
             ))}
           </tbody>
         </table>
+        <button onClick={()=>downloadFile("http://localhost:3000/edit/666a89104f8aa16c3ae133bd")}>fds</button>
       </div>
     </div>
   );
